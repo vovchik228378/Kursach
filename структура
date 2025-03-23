@@ -1,0 +1,33 @@
+account
+├── index.html
+├── script.js
+│
+├── login
+│   ├── login.html
+│   └── script.js
+│
+├── main1
+│   ├── index.html
+│   └── script.js
+│
+├── main2
+│   ├── index.html
+│   └── script.js
+│
+|── registr
+|    ├── index.html
+|    └── script.js
+|
+|── server
+|   ├── node_modules/
+|   ├── server.js
+|   ├── db.js
+|   ├── routes/
+|   ├── auth.js
+│   └── markers.js
+|   ├── middleware/
+│   └── auth.js
+└   └──package.json
+
+style.css (основной)
+styles.css (для регистр и входа)

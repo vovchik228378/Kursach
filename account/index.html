@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МояКарта - Личный кабинет</title>
+    <link rel="stylesheet" href="E:\aue228\style.css">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=ваш_api_ключ&lang=ru_RU" type="text/javascript"></script>
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <div class="top-bar">
+        <button class="buttonmain"><a href="E:\aue228\Main-2\index.html">МояКарта</button></a>
+        <div class="user-info">
+            <button class="button"> <a href="#">Профиль</a></button>
+            <button class="button"> <a href="#">Выход</a></button>
+        </div>
+    </div>
+    <div class="container">
+        <section class="map-section">
+            <h2>Моя карта (личные метки)</h2>
+            <div id="map" style="width: 100%; height: 600px;"></div>
+            <button id="addMarker" class="button">Добавить метку</button>
+            <select id="markerList" class="button">
+                <option value="">Выберите метку для удаления</option>
+            </select>
+            <button id="removeMarker" class="button">Удалить выбранную метку</button>
+        </section>
+    </div>
+</body>
+
+</html>

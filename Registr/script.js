@@ -6,15 +6,13 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
 
-
     if (password !== confirmPassword) {
         alert('Пароли не совпадают!');
         return;
     }
 
-
     try {
-        const response = await fetch('http://localhost:5000/register', {
+        const response = await fetch('http://localhost:5000/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -26,13 +24,10 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         alert(data.message);
 
         if (response.ok) {
-            window.location.href = 'Login\login.html';
+            window.location.href = '/login/login.html';
         }
     } catch (error) {
         console.error('Ошибка:', error);
         alert('Ошибка при регистрации');
     }
 });
-if (response.ok) {
-    window.location.href = 'Main-2\index.html';
-};

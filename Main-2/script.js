@@ -11,36 +11,94 @@ document.addEventListener('DOMContentLoaded', function() {
             zoom: 10
         });
 
+        loadMarkersFromServer();
+
         document.getElementById('addMarker').addEventListener('click', function() {
-            var coords = myMap.getCenter();
-            var marker = new ymaps.Placemark(coords, {
-                hintContent: 'Метка ' + markerCounter
-            });
-            myMap.geoObjects.add(marker);
-            markers.push(marker);
-            updateMarkerList();
-            markerCounter++;
+            let coords = myMap.getCenter();
+            let hint = 'Моя метка ' + markerCounter;
+            addMarkerToServer(coords, hint);
         });
 
         document.getElementById('removeMarker').addEventListener('click', function() {
-            var select = document.getElementById('markerList');
-            var selectedIndex = select.selectedIndex - 1;
+            let select = document.getElementById('markerList');
+            let selectedIndex = select.selectedIndex - 1;
+
             if (selectedIndex >= 0 && selectedIndex < markers.length) {
-                myMap.geoObjects.remove(markers[selectedIndex]);
-                markers.splice(selectedIndex, 1);
-                updateMarkerList();
+                removeMarkerFromServer(markers[selectedIndex].id);
             }
         });
+    }
 
-        function updateMarkerList() {
-            var select = document.getElementById('markerList');
-            select.innerHTML = '<option value="">Выберите метку для удаления</option>';
-            markers.forEach((marker, index) => {
-                var option = document.createElement('option');
-                option.value = index;
-                option.text = 'Метка ' + (index + 1);
-                select.appendChild(option);
+    async function loadMarkersFromServer() {
+        try {
+            const response = await fetch('http://localhost:5000/api/markers/my', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
             });
+            const data = await response.json();
+            markers = data;
+            updateMarkerList();
+            refreshMapMarkers();
+        } catch (error) {
+            console.error('Ошибка:', error);
         }
+    }
+
+    async function addMarkerToServer(coords, hint) {
+        try {
+            const response = await fetch('http://localhost:5000/api/markers/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ lat: coords[0], lng: coords[1], hint })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                loadMarkersFromServer();
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
+
+    async function removeMarkerFromServer(markerId) {
+        try {
+            const response = await fetch(`http://localhost:5000/api/markers/delete/${markerId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await response.json();
+            if (response.ok) {
+                loadMarkersFromServer();
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
+
+    function updateMarkerList() {
+        let select = document.getElementById('markerList');
+        select.innerHTML = '<option value="">Выберите метку для удаления</option>';
+        markers.forEach((marker, index) => {
+            let option = document.createElement('option');
+            option.value = index;
+            option.text = marker.hint;
+            select.appendChild(option);
+        });
+    }
+
+    function refreshMapMarkers() {
+        myMap.geoObjects.removeAll();
+        markers.forEach(markerData => {
+            let placemark = new ymaps.Placemark([markerData.lat, markerData.lng], {
+                hintContent: markerData.hint
+            });
+            myMap.geoObjects.add(placemark);
+        });
     }
 });
