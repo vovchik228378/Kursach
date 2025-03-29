@@ -14,8 +14,8 @@
     <div class="top-bar">
         <button class="buttonmain">МояКарта</button>
         <div class="user-info">
-            <button class="button"> <a href ="/account/index.html">Личный кабинет</a></button>
-            <button class="button"> <a href="#">Поиск друзей</a></button>
+            <button class="button" id="profileButton"> Личный кабинет</button>
+            <button class="button"> <a href="/friends/index.html">Поиск пользователей</a></button>
         </div>
     </div>
     <div class="container">
@@ -29,6 +29,17 @@
             <button id="removeMarker" class="button">Удалить выбранную метку</button>
         </section>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = localStorage.getItem('username');
+            if (username) {
+                document.getElementById('profileButton').textContent = username;
+                document.getElementById('profileButton').onclick = function() {
+                    window.location.href = '/account/index.html';
+                };
+            }
+        });
+    </script>
 </body>
 
 </html>

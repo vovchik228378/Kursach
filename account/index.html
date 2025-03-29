@@ -12,10 +12,10 @@
 
 <body>
     <div class="top-bar">
-        <button class="buttonmain"><a href="/Main-2/index.html">МояКарта</button></a>
+        <button class="buttonmain"><a href="/Main-2/index.html">МояКарта</a></button>
         <div class="user-info">
-            <button class="button"> <a href="#">Профиль</a></button>
-            <button class="button"> <a href="#">Выход</a></button>
+            <button class="button" id="profileButton">Профиль</button>
+            <button class="button" id="logoutButton">Выход</button>
         </div>
     </div>
     <div class="container">
@@ -29,6 +29,20 @@
             <button id="removeMarker" class="button">Удалить выбранную метку</button>
         </section>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = localStorage.getItem('username');
+            if (username) {
+                document.getElementById('profileButton').textContent = username;
+            }
+
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                localStorage.removeItem('token');
+                localStorage.removeItem('username');
+                window.location.href = '/Main-1/index.html';
+            });
+        });
+    </script>
 </body>
 
 </html>

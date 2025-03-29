@@ -158,3 +158,16 @@ select:hover {
         padding: 10px;
     }
 }
+
+
+/*для friend/index.html*/
+
+.clickable {
+    cursor: pointer;
+    color: #0066cc;
+    text-decoration: underline;
+}
+
+.clickable:hover {
+    color: #004499;
+}

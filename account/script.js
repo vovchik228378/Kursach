@@ -1,28 +1,50 @@
-document.getElementById('loginForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
+document.addEventListener('DOMContentLoaded', function() {
+    // Получаем username из URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const profileUsername = urlParams.get('username');
+    const currentUsername = localStorage.getItem('username');
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    // Если просматриваем чужой профиль, блокируем функционал
+    if (profileUsername && profileUsername !== currentUsername) {
+        document.getElementById('addMarker').style.display = 'none';
+        document.getElementById('markerList').style.display = 'none';
+        document.getElementById('removeMarker').style.display = 'none';
+        document.querySelector('h2').textContent = `Карта пользователя ${profileUsername}`;
+    }
 
-    try {
-        const response = await fetch('http://localhost:5000/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
+    ymaps.ready(init);
+
+    let myMap;
+    let markers = [];
+
+    function init() {
+        myMap = new ymaps.Map("map", {
+            center: [55.76, 37.64],
+            zoom: 10
         });
 
-        const data = await response.json();
-        alert(data.message);
-
-        if (response.ok) {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('username', data.username);
-            window.location.href = '/main2/index.html';
-        }
-    } catch (error) {
-        console.error('Ошибка:', error);
-        alert('Ошибка при входе');
+        loadMarkers();
     }
+
+    async function loadMarkers() {
+        try {
+            const username = new URLSearchParams(window.location.search).get('username') ||
+                localStorage.getItem('username');
+
+            const response = await fetch(`/api/markers?username=${username}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            const data = await response.json();
+            markers = data;
+            refreshMapMarkers();
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
+
+    // Остальные функции остаются без изменений
+    // ... (addMarkerToServer, removeMarkerFromServer и т.д.)
 });

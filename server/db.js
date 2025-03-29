@@ -3,7 +3,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'vovan',
     password: '1234554321',
-    database: 'myamap'
+    database: 'mapapp'
 });
 
 connection.connect((err) => {

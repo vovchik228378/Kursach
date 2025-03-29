@@ -1,7 +1,7 @@
 document.getElementById('loginForm').addEventListener('submit', async function(event) {
     event.preventDefault();
 
-    const email = document.getElementById('email').value;
+    const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
     try {
@@ -10,7 +10,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ username, password }),
         });
 
         const data = await response.json();
@@ -19,7 +19,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         if (response.ok) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('username', data.username);
-            window.location.href = '/main2/index.html';
+            window.location.href = '/Main-2/index.html';
         }
     } catch (error) {
         console.error('Ошибка:', error);

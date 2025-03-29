@@ -24,7 +24,20 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         alert(data.message);
 
         if (response.ok) {
-            window.location.href = '/login/login.html';
+            const loginResponse = await fetch('http://localhost:5000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const loginData = await loginResponse.json();
+            if (loginResponse.ok) {
+                localStorage.setItem('token', loginData.token);
+                localStorage.setItem('username', loginData.username);
+                window.location.href = '/Main-2/index.html';
+            }
         }
     } catch (error) {
         console.error('Ошибка:', error);

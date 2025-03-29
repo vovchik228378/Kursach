@@ -1,7 +1,12 @@
-account
-├── index.html
-├── script.js
-│
+AUE228
+|── account
+|   |──index.html
+|   └──script.js
+|
+│──friends
+|  |──index.html
+|  |──script.js
+|
 ├── login
 │   ├── login.html
 │   └── script.js
@@ -27,7 +32,9 @@ account
 │   └── markers.js
 |   ├── middleware/
 │   └── auth.js
-└   └──package.json
+|   └──package.json
+└ 
+
 
 style.css (основной)
 styles.css (для регистр и входа)
