@@ -16,22 +16,19 @@
         </div>
     </div>
 
-    <div class="container">
-        <section class="search-section">
-            <h1>Поиск пользователей</h1>
+    <div class="search-section">
+        <h1>Поиск пользователей</h1>
 
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Введите имя">
-                <button id="searchBtn" class="button">Найти</button>
-            </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Введите никнейм пользователя">
+            <button id="searchBtn" class="button">Найти</button>
+        </div>
 
-            <div id="results" class="users-list"></div>
-        </section>
+        <div id="results" class="users-list"></div>
     </div>
 
     <script src="/friends/script.js"></script>
     <script>
-        // Показываем текущего пользователя
         document.addEventListener('DOMContentLoaded', () => {
             const username = localStorage.getItem('username');
             if (username) {
