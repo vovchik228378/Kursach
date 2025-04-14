@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
-const SECRET_KEY = process.env.JWT_SECRET || 'default_secret_key';
+const SECRET_KEY = 'твой_секретный_ключ';
 
 // Middleware
 app.use(cors());

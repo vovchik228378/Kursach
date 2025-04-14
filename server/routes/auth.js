@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const SECRET_KEY = process.env.JWT_SECRET;
+const SECRET_KEY = 'твой_секретный_ключ';
 
 // Регистрация пользователя
 router.post('/register', async(req, res) => {
