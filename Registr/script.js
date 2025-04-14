@@ -11,8 +11,14 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         return;
     }
 
+    // Определяем базовый URL в зависимости от окружения
+    const BASE_URL = window.location.hostname === 'localhost' ?
+        'http://localhost:5000' :
+        'https://your-backend-server.com'; // Замените на реальный URL вашего API
+
     try {
-        const response = await fetch('http://localhost:5000/api/register', {
+        // 1. Регистрация
+        const response = await fetch(`${BASE_URL}/api/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,8 +29,9 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         const data = await response.json();
         alert(data.message);
 
+        // 2. Автоматический вход после регистрации
         if (response.ok) {
-            const loginResponse = await fetch('http://localhost:5000/api/login', {
+            const loginResponse = await fetch(`${BASE_URL}/api/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -33,9 +40,13 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
             });
 
             const loginData = await loginResponse.json();
+
             if (loginResponse.ok) {
+                // Сохраняем данные
                 localStorage.setItem('token', loginData.token);
                 localStorage.setItem('username', loginData.username);
+
+                // Перенаправляем (используем относительный путь)
                 window.location.href = '/Main-2/index.html';
             }
         }
