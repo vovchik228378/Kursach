@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>МояКарта - Главная</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
     <script src="https://api-maps.yandex.ru/2.1/?apikey=ваш_api_ключ&lang=ru_RU" type="text/javascript"></script>
-    <script src="/Main-2/script.js" defer></script>
+    <script src="Main-2/script.js" defer></script>
 </head>
 
 <body>
@@ -15,7 +15,7 @@
         <button class="buttonmain">МояКарта</button>
         <div class="user-info">
             <button class="button" id="profileButton"> Личный кабинет</button>
-            <button class="button"> <a href="/friends/index.html">Поиск пользователей</a></button>
+            <button class="button"> <a href="friends/index.html">Поиск пользователей</a></button>
         </div>
     </div>
     <div class="container">
@@ -30,7 +30,7 @@
             if (username) {
                 document.getElementById('profileButton').textContent = username;
                 document.getElementById('profileButton').onclick = function() {
-                    window.location.href = '/account/index.html';
+                    window.location.href = 'account/index.html';
                 };
             }
         });

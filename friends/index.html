@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Поиск пользователей</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div class="top-bar">
-        <button class="buttonmain"><a href="/Main-2/index.html">МояКарта</a></button>
+        <button class="buttonmain"><a href="Main-2/index.html">МояКарта</a></button>
         <div class="user-info">
             <button class="button" id="profileButton">Личный кабинет</button>
         </div>
@@ -27,14 +27,14 @@
         <div id="results" class="users-list"></div>
     </div>
 
-    <script src="/friends/script.js"></script>
+    <script src="friends/script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const username = localStorage.getItem('username');
             if (username) {
                 document.getElementById('profileButton').textContent = username;
                 document.getElementById('profileButton').onclick = () => {
-                    window.location.href = '/account/index.html';
+                    window.location.href = 'account/index.html';
                 };
             }
         });
