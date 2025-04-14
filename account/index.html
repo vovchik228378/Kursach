@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>МояКарта - Личный кабинет</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
     <script src="https://api-maps.yandex.ru/2.1/?apikey=ваш_api_ключ&lang=ru_RU" type="text/javascript"></script>
-    <script src="account/script.js"></script>
+    <script src="script.js"></script>
 </head>
 
 <body>
     <div class="top-bar">
-        <button class="buttonmain"><a href="/Main-2/index.html">МояКарта</a></button>
+        <button class="buttonmain"><a href="Main-2/index.html">МояКарта</a></button>
         <div class="user-info">
             <button class="button" id="profileButton">Профиль</button>
             <button class="button" id="logoutButton">Выход</button>
@@ -34,7 +34,7 @@
             document.getElementById('logoutButton').addEventListener('click', function() {
                 localStorage.removeItem('token');
                 localStorage.removeItem('username');
-                window.location.href = '/Main-1/index.html';
+                window.location.href = 'index.html';
             });
         });
     </script>
