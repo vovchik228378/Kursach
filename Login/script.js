@@ -19,7 +19,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         if (response.ok) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('username', data.username);
-            window.location.href = '/Main-2/index.html';
+            window.location.href = '/Main-2/index.html'; //Тут
         }
     } catch (error) {
         console.error('Ошибка:', error);

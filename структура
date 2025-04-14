@@ -33,7 +33,7 @@ AUE228
 |   ├── middleware/
 │   └── auth.js
 |   └──package.json
-└ 
+└ ── .env
 
 
 style.css (основной)

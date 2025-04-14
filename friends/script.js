@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!query) return;
 
         try {
-            const response = await fetch(`/api/users/search?q=${encodeURIComponent(query)}`, {
+            const response = await fetch(`/api/users/search?q=${encodeURIComponent(query)}`, { //Тут
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.clickable').forEach(el => {
             el.addEventListener('click', (e) => {
                 const username = e.target.closest('.user-card').getAttribute('data-username');
-                window.location.href = `/account/index.html?username=${username}`;
+                window.location.href = `/account/index.html?username=${username}`; //Тут
             });
         });
     };

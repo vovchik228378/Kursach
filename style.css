@@ -478,3 +478,49 @@ select {
         width: 100%;
     }
 }
+
+.marker-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.marker-form {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.marker-form h3 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.marker-form input,
+.marker-form textarea,
+.marker-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.button-cancel {
+    background-color: #f44336;
+}
