@@ -1,4 +1,5 @@
 AUE228
+|──index.html
 |── account
 |   |──index.html
 |   └──script.js
@@ -11,11 +12,7 @@ AUE228
 │   ├── login.html
 │   └── script.js
 │
-├── main1
-│   ├── index.html
-│   └── script.js
-│
-├── main2
+├── main-2
 │   ├── index.html
 │   └── script.js
 │

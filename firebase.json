@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "Kursach",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
