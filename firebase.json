@@ -1,10 +1,63 @@
 {
-  "hosting": {
-    "public": "Kursach",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
-  }
+    "hosting": {
+        "public": "public",
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**"
+        ],
+        "rewrites": [{
+                "source": "/account{,/**}",
+                "destination": "/account/index.html"
+            },
+            {
+                "source": "/friends{,/**}",
+                "destination": "/friends/index.html"
+            },
+            {
+                "source": "/login{,/**}",
+                "destination": "/login/login.html"
+            },
+            {
+                "source": "/registr{,/**}",
+                "destination": "/registr/registr.html"
+            },
+            {
+                "source": "**",
+                "destination": "/index.html"
+            }
+        ],
+        "headers": [{
+                "source": "/styles/main.css",
+                "headers": [{
+                        "key": "Cache-Control",
+                        "value": "max-age=31536000"
+                    },
+                    {
+                        "key": "Vary",
+                        "value": "Accept-Encoding"
+                    }
+                ]
+            },
+            {
+                "source": "/styles/auth.css",
+                "headers": [{
+                        "key": "Cache-Control",
+                        "value": "max-age=31536000"
+                    },
+                    {
+                        "key": "Vary",
+                        "value": "Accept-Encoding"
+                    }
+                ]
+            },
+            {
+                "source": "**/*.@(js|png|jpg|jpeg|gif|ico|svg)",
+                "headers": [{
+                    "key": "Cache-Control",
+                    "value": "max-age=31536000"
+                }]
+            }
+        ]
+    }
 }

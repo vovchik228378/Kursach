@@ -1,37 +1,12 @@
-AUE228
-|──index.html
-|── account
-|   |──index.html
-|   └──script.js
-|
-│──friends
-|  |──index.html
-|  |──script.js
-|
-├── login
-│   ├── login.html
-│   └── script.js
-│
-├── main-2
+my-project/
+├── public/          # Весь фронтенд
 │   ├── index.html
+│   ├── account/
+│   ├── friends/
+│   ├── login.html
+│   ├── registr.html
+│   ├── styles.css
 │   └── script.js
-│
-|── registr
-|    ├── index.html
-|    └── script.js
-|
-|── server
-|   ├── node_modules/
-|   ├── server.js
-|   ├── db.js
-|   ├── routes/
-|   ├── auth.js
-│   └── markers.js
-|   ├── middleware/
-│   └── auth.js
-|   └──package.json
-└ ── .env
-
-
-style.css (основной)
-styles.css (для регистр и входа)
+└── functions/       # Бэкенд
+    ├── index.js
+    └── package.json

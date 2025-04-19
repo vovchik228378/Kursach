@@ -1,5 +1,14 @@
 {
-  "projects": {
-    "default": "mycard-89511"
-  }
+    "projects": {
+        "default": "mycard-ae62b"
+    },
+    "targets": {
+        "mycard-ae62b": {
+            "hosting": {
+                "production": [
+                    "mycard-ae62b"
+                ]
+            }
+        }
+    }
 }
