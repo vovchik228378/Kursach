@@ -1,92 +1,78 @@
-const firebaseConfig = {
-    apiKey: "AIzaSyABCDEFGHIJKLMNOPQRSTUVWXYZ12345678",
-    authDomain: "your-project-id.firebaseapp.com",
-    projectId: "your-project-id",
-    storageBucket: "your-project-id.appspot.com",
-    messagingSenderId: "123456789012",
-    appId: "1:123456789012:web:abcdef1234567890abcdef"
-};
+// Инициализация Supabase
+const supabase = supabase.createClient(
+    'https://mxdddbkfyugyyzabfqor.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ'
+)
 
-// Инициализация Firebase
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('loginForm')
+    const emailInput = document.getElementById('email')
+    const passwordInput = document.getElementById('password')
+    const submitBtn = loginForm.querySelector('button[type="submit"]')
 
-const auth = firebase.auth();
+    // Проверка активной сессии
+    supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session) {
+            window.location.href = '/account/index.html'
+        }
+    })
 
-// Обработка формы входа
-document.getElementById('loginForm').addEventListener('submit', async(e) => {
-    e.preventDefault();
+    // Обработка формы входа
+    loginForm.addEventListener('submit', async(e) => {
+        e.preventDefault()
 
-    const email = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
+        const email = emailInput.value.trim()
+        const password = passwordInput.value
 
-    // Валидация
-    if (!email || !password) {
-        showError('Заполните все поля');
-        return;
+        // Валидация
+        if (!email || !password) {
+            showError('Заполните все поля')
+            return
+        }
+
+        // Блокировка кнопки во время запроса
+        submitBtn.disabled = true
+        submitBtn.textContent = 'Вход...'
+
+        try {
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password
+            })
+
+            if (error) throw error
+
+            // Успешный вход
+            window.location.href = '/account/index.html'
+        } catch (error) {
+            showError(getErrorMessage(error))
+        } finally {
+            submitBtn.disabled = false
+            submitBtn.textContent = 'Войти'
+        }
+    })
+
+    // Показать ошибку
+    function showError(message) {
+        let errorElement = document.getElementById('error-message')
+        if (!errorElement) {
+            errorElement = document.createElement('div')
+            errorElement.id = 'error-message'
+            errorElement.className = 'error-message'
+            loginForm.prepend(errorElement)
+        }
+        errorElement.textContent = message
     }
 
-    try {
-        // Показываем индикатор загрузки
-        const submitBtn = document.querySelector('#loginForm button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Вход...';
-
-        // Аутентификация
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        const user = userCredential.user;
-
-        // Перенаправление
-        window.location.href = '/account/index.html';
-    } catch (error) {
-        handleAuthError(error);
-    } finally {
-        // Восстанавливаем кнопку
-        const submitBtn = document.querySelector('#loginForm button[type="submit"]');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Войти';
+    // Преобразование ошибок в понятный текст
+    function getErrorMessage(error) {
+        switch (error.message) {
+            case 'Invalid login credentials':
+                return 'Неверный email или пароль'
+            case 'Email not confirmed':
+                return 'Подтвердите email перед входом'
+            default:
+                return 'Ошибка входа: ' + error.message
+        }
     }
-});
-
-// Обработчик ошибок
-function handleAuthError(error) {
-    let message = 'Ошибка входа';
-
-    switch (error.code) {
-        case 'auth/user-not-found':
-            message = 'Пользователь не найден';
-            break;
-        case 'auth/wrong-password':
-            message = 'Неверный пароль';
-            break;
-        case 'auth/invalid-email':
-            message = 'Некорректный email';
-            break;
-        default:
-            message = 'Ошибка: ' + error.message;
-    }
-
-    showError(message);
-}
-
-// Показ ошибок
-function showError(message) {
-    const errorElement = document.getElementById('error-message') || createErrorElement();
-    errorElement.textContent = message;
-}
-
-function createErrorElement() {
-    const errorDiv = document.createElement('div');
-    errorDiv.id = 'error-message';
-    errorDiv.className = 'error-message';
-    document.querySelector('.login-form').prepend(errorDiv);
-    return errorDiv;
-}
-
-// Проверка авторизации при загрузке
-auth.onAuthStateChanged((user) => {
-    if (user && window.location.pathname.includes('login.html')) {
-        window.location.href = '/account/index.html';
-    }
-});
+})

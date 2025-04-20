@@ -3,27 +3,89 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/styles/main.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>МояКарта - Главная</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <!-- Подключаем Supabase через CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Локальные стили для быстрой загрузки */
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 
 <body>
     <div class="main-container">
         <div class="logo-container">
-            <button class="logo-button">
-                <a href="/index.html">МояКарта</a>
-            </button>
+            <h1 class="logo-text">МояКарта</h1>
+            <p class="logo-subtext">Ваши места на карте мира</p>
         </div>
-        <div class="auth-buttons">
-            <button class="auth-button">
-                <a href="/login/login.html">Вход</a>
-            </button>
-            <button class="auth-button register">
-                <a href="/registr/registr.html">Регистрация</a>
-            </button>
+
+        <div class="auth-buttons" id="authButtons">
+            <!-- Кнопки по умолчанию -->
+            <a href="/login/login.html" class="auth-button">Вход</a>
+            <a href="/registr/registr.html" class="auth-button register">Регистрация</a>
+        </div>
+
+        <div class="user-panel" id="userPanel" style="display: none;">
+            <!-- Будет показано для авторизованных пользователей -->
+            <a href="/account/index.html" class="auth-button" id="profileLink">Профиль</a>
+            <button class="auth-button" id="logoutButton">Выход</button>
         </div>
     </div>
+
+    <script>
+        // Инициализация Supabase
+        const supabase = supabase.createClient(
+            'https://mxdddbkfyugyyzabfqor.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ'
+        )
+
+        // Проверка состояния авторизации
+        document.addEventListener('DOMContentLoaded', async() => {
+            const {
+                data: {
+                    user
+                }
+            } = await supabase.auth.getUser()
+            const authButtons = document.getElementById('authButtons')
+            const userPanel = document.getElementById('userPanel')
+            const profileLink = document.getElementById('profileLink')
+            const logoutButton = document.getElementById('logoutButton')
+
+            if (user) {
+                // Пользователь авторизован
+                authButtons.style.display = 'none'
+                userPanel.style.display = 'flex'
+                profileLink.textContent = user.email || 'Профиль'
+
+                // Обработчик выхода
+                logoutButton.addEventListener('click', async() => {
+                    await supabase.auth.signOut()
+                    window.location.reload()
+                })
+            } else {
+                // Пользователь не авторизован
+                authButtons.style.display = 'flex'
+                userPanel.style.display = 'none'
+            }
+        })
+    </script>
 </body>
 
 </html>

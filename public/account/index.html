@@ -7,12 +7,46 @@
     <title>МояКарта - Личный кабинет</title>
     <link rel="stylesheet" href="../style.css">
     <script src="https://api-maps.yandex.ru/2.1/?apikey=ваш_api_ключ&lang=ru_RU" type="text/javascript"></script>
+
+    <!-- Подключаем Supabase через CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        // Инициализация Supabase
+        const supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co'
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ'
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+            // Проверка авторизации при загрузке
+        document.addEventListener('DOMContentLoaded', async function() {
+            const {
+                data: {
+                    user
+                },
+                error
+            } = await supabase.auth.getUser()
+
+            if (!user) {
+                window.location.href = '/login/login.html'
+                return
+            }
+
+            // Установка имени пользователя
+            document.getElementById('profileButton').textContent = user.email
+
+            // Выход из системы
+            document.getElementById('logoutButton').addEventListener('click', async function() {
+                await supabase.auth.signOut()
+                window.location.href = '/login/login.html'
+            })
+        })
+    </script>
+
     <script src="script.js"></script>
 </head>
 
 <body>
     <div class="top-bar">
-        <button class="buttonmain"><a href="Main-2/index.html">МояКарта</a></button>
+        <button class="buttonmain"><a href="../main/index.html">МояКарта</a></button>
         <div class="user-info">
             <button class="button" id="profileButton">Профиль</button>
             <button class="button" id="logoutButton">Выход</button>
@@ -24,20 +58,6 @@
             <div id="map" style="width: 100%; height: 600px;"></div>
         </section>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const username = localStorage.getItem('username');
-            if (username) {
-                document.getElementById('profileButton').textContent = username;
-            }
-
-            document.getElementById('logoutButton').addEventListener('click', function() {
-                localStorage.removeItem('token');
-                localStorage.removeItem('username');
-                window.location.href = 'index.html';
-            });
-        });
-    </script>
 </body>
 
 </html>

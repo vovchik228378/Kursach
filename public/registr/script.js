@@ -1,107 +1,97 @@
-// Импорт Firebase (должен быть добавлен в HTML перед этим файлом)
-// <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-// <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-// <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+// Инициализация Supabase
+const supabase = supabase.createClient(
+    'https://mxdddbkfyugyyzabfqor.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ'
+)
 
-// Конфигурация Firebase (замените значения на свои из Firebase Console)
-const firebaseConfig = {
-    apiKey: "AIzaSyABCDEFGHIJKLMNOPQRSTUVWXYZ12345678",
-    authDomain: "your-project-id.firebaseapp.com",
-    projectId: "your-project-id",
-    storageBucket: "your-project-id.appspot.com",
-    messagingSenderId: "123456789012",
-    appId: "1:123456789012:web:abcdef1234567890abcdef"
-};
-
-// Инициализация Firebase
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-// Обработка формы регистрации
 document.getElementById('registrationForm').addEventListener('submit', async(e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const username = document.getElementById('username').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirm-password').value;
+    const email = document.getElementById('email').value.trim()
+    const password = document.getElementById('password').value
+    const confirmPassword = document.getElementById('confirm-password').value
+    const username = document.getElementById('username').value.trim()
 
     // Валидация формы
-    if (!username || !email || !password || !confirmPassword) {
-        alert('Пожалуйста, заполните все поля!');
-        return;
+    if (password !== confirmPassword) {
+        showError('Пароли не совпадают')
+        return
     }
 
     if (password.length < 6) {
-        alert('Пароль должен содержать минимум 6 символов!');
-        return;
+        showError('Пароль должен содержать минимум 6 символов')
+        return
     }
 
-    if (password !== confirmPassword) {
-        alert('Пароли не совпадают!');
-        return;
+    if (username.length < 3) {
+        showError('Имя пользователя должно содержать минимум 3 символа')
+        return
     }
+
+    const submitBtn = e.target.querySelector('button[type="submit"]')
+    submitBtn.disabled = true
+    submitBtn.textContent = 'Регистрация...'
 
     try {
-        // Показываем индикатор загрузки
-        const submitBtn = document.querySelector('#registrationForm button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Регистрация...';
+        // 1. Регистрация в Supabase Auth
+        const { data: auth, error: authError } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    username: username
+                }
+            }
+        })
 
-        // 1. Создаем пользователя в Authentication
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        const user = userCredential.user;
+        if (authError) throw authError
 
-        // 2. Сохраняем дополнительные данные в Firestore
-        await db.collection('users').doc(user.uid).set({
-            username: username,
-            email: email,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            markerCount: 0,
-            emailVerified: false,
-            isPublic: false // Флаг публичного профиля
-        });
+        // 2. Сохранение дополнительных данных в таблице users
+        const { error: dbError } = await supabase
+            .from('users')
+            .insert([{
+                id: auth.user.id,
+                email,
+                username,
+                created_at: new Date().toISOString()
+            }])
 
-        // 3. Отправляем письмо для верификации
-        await user.sendEmailVerification();
+        if (dbError) throw dbError
 
-        alert('Регистрация успешна! Письмо для подтверждения email отправлено на вашу почту.');
-        window.location.href = '/account/index.html';
+        // Успешная регистрация
+        alert('Регистрация успешно завершена! Проверьте вашу почту для подтверждения email.')
+        window.location.href = '/account/index.html'
+
     } catch (error) {
-        let errorMessage = 'Ошибка регистрации';
-        switch (error.code) {
-            case 'auth/email-already-in-use':
-                errorMessage = 'Этот email уже зарегистрирован';
-                break;
-            case 'auth/invalid-email':
-                errorMessage = 'Некорректный email';
-                break;
-            case 'auth/weak-password':
-                errorMessage = 'Пароль слишком простой (минимум 6 символов)';
-                break;
-            case 'auth/operation-not-allowed':
-                errorMessage = 'Регистрация по email временно недоступна';
-                break;
-            default:
-                errorMessage = 'Произошла ошибка: ' + error.message;
-        }
-
-        alert(errorMessage);
-        console.error('Ошибка регистрации:', error);
-
-        // Восстанавливаем кнопку
-        const submitBtn = document.querySelector('#registrationForm button[type="submit"]');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Зарегистрироваться';
+        console.error('Ошибка регистрации:', error)
+        showError(getErrorMessage(error))
+    } finally {
+        submitBtn.disabled = false
+        submitBtn.textContent = 'Зарегистрироваться'
     }
-});
+})
 
-// Дополнительно: кнопка "Уже есть аккаунт?"
-const loginLink = document.createElement('div');
-loginLink.className = 'login-link';
-loginLink.innerHTML = '<p>Уже есть аккаунт? <a href="/login/login.html">Войти</a></p>';
-document.querySelector('.container').appendChild(loginLink);
+// Функции для обработки ошибок
+function showError(message) {
+    let errorElement = document.getElementById('error-message')
+    if (!errorElement) {
+        errorElement = document.createElement('div')
+        errorElement.id = 'error-message'
+        errorElement.className = 'error-message'
+        document.querySelector('.register-form').prepend(errorElement)
+    }
+    errorElement.textContent = message
+}
+
+function getErrorMessage(error) {
+    switch (error.message) {
+        case 'User already registered':
+            return 'Пользователь с таким email уже зарегистрирован'
+        case 'Password should be at least 6 characters':
+            return 'Пароль должен содержать минимум 6 символов'
+        case 'Invalid email':
+            return 'Некорректный email'
+        default:
+            return 'Ошибка регистрации: ' + error.message
+    }
+}
