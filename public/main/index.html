@@ -6,8 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>МояКарта - Главная</title>
     <link rel="stylesheet" href="/styles/main.css">
-    <script src="7177144e-52fd-4848-8122-eed8ecb9c686" type="text/javascript"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=7177144e-52fd-4848-8122-eed8ecb9c686&lang=ru_RU" type="text/javascript"></script>
     <script src="script.js" defer></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        // Глобальная инициализация Supabase
+        window.supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co';
+        window.supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ';
+        window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    </script>
 </head>
 
 <body>

@@ -1,3 +1,8 @@
+// Инициализация Supabase
+const supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ'
+const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+
 // Глобальные переменные
 let map;
 let currentUser;
@@ -27,6 +32,7 @@ async function loadUserMarkers(userId) {
         }
     } catch (error) {
         console.error('Ошибка загрузки меток:', error);
+        alert('Не удалось загрузить метки');
     }
 }
 
@@ -49,7 +55,7 @@ function addMarkerToMap(marker) {
 // Функция добавления новой метки
 async function addNewMarker(coords, name, description, emoji = '📍') {
     try {
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from('markers')
             .insert([{
                 user_id: currentUser.id,
@@ -58,21 +64,70 @@ async function addNewMarker(coords, name, description, emoji = '📍') {
                 name,
                 description,
                 emoji
-            }]);
+            }])
+            .select();
 
         if (error) throw error;
 
-        return true;
+        // Добавляем новую метку на карту
+        if (data && data.length > 0) {
+            addMarkerToMap(data[0]);
+            return true;
+        }
+        return false;
     } catch (error) {
         console.error('Ошибка добавления метки:', error);
+        alert('Не удалось добавить метку');
         return false;
     }
 }
 
 // Функция показа формы добавления метки
 function showMarkerForm(coords) {
-    // Реализуйте вашу форму добавления метки
-    // При подтверждении вызывайте addNewMarker()
+    // Создаем форму
+    const formHtml = `
+        <div class="marker-form-overlay">
+            <div class="marker-form">
+                <h3>Добавить новую метку</h3>
+                <input type="text" id="markerName" placeholder="Название метки" required>
+                <textarea id="markerDescription" placeholder="Описание"></textarea>
+                <select id="markerEmoji">
+                    <option value="📍">📍 - По умолчанию</option>
+                    <option value="home">🏠 - Дом</option>
+                    <option value="work">💼 - Работа</option>
+                    <option value="favorite">❤️ - Любимое место</option>
+                </select>
+                <div class="form-buttons">
+                    <button id="cancelMarker" class="button button-cancel">Отмена</button>
+                    <button id="saveMarker" class="button">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Добавляем форму в DOM
+    document.body.insertAdjacentHTML('beforeend', formHtml);
+
+    // Обработчики событий
+    document.getElementById('cancelMarker').addEventListener('click', () => {
+        document.querySelector('.marker-form-overlay').remove();
+    });
+
+    document.getElementById('saveMarker').addEventListener('click', async() => {
+        const name = document.getElementById('markerName').value.trim();
+        const description = document.getElementById('markerDescription').value.trim();
+        const emoji = document.getElementById('markerEmoji').value;
+
+        if (!name) {
+            alert('Введите название метки');
+            return;
+        }
+
+        const success = await addNewMarker(coords, name, description, emoji);
+        if (success) {
+            document.querySelector('.marker-form-overlay').remove();
+        }
+    });
 }
 
 // Инициализация карты и приложения

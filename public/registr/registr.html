@@ -1,47 +1,48 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация</title>
     <link rel="stylesheet" href="/styles/auth.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Регистрация</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        // Глобальная инициализация Supabase
+        window.supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co';
+        window.supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ';
+        window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    </script>
 </head>
 
 <body>
-    <div class="register-container">
-        <div class="register-header">
-            <h1>МояКарта</h1>
-            <p>Создайте новый аккаунт</p>
-        </div>
+    <div class="container">
+        <button class="buttonmain">
+            <a href="/index.html">МояКарта</a>
+        </button>
+    </div>
 
-        <form id="registrationForm" class="register-form">
+    <div class="container">
+        <h1 class="h1">Регистрация</h1>
+
+        <form id="registrationForm" class="login-form">
             <div class="input-group">
-                <label for="username">Имя пользователя</label>
-                <input type="text" id="username" required minlength="3">
+                <label for="username">Имя пользователя:</label>
+                <input type="text" id="username" name="username" required>
             </div>
-
             <div class="input-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" required>
+                <label for="email">Электронная почта:</label>
+                <input type="email" id="email" name="email" required>
             </div>
-
             <div class="input-group">
-                <label for="password">Пароль (минимум 6 символов)</label>
-                <input type="password" id="password" required minlength="6">
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" required>
             </div>
-
             <div class="input-group">
-                <label for="confirm-password">Подтвердите пароль</label>
-                <input type="password" id="confirm-password" required>
+                <label for="confirm-password">Подтвердите пароль:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
             </div>
-
-            <button type="submit" class="register-button">Зарегистрироваться</button>
-
-            <div class="login-link">
-                Уже есть аккаунт? <a href="/login/login.html">Войти</a>
-            </div>
+            <button type="submit" class="button">Зарегистрироваться</button>
         </form>
     </div>
 

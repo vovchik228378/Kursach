@@ -1,9 +1,7 @@
 // Инициализация Supabase
-const supabase = supabase.createClient(
-    'https://mxdddbkfyugyyzabfqor.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ'
-)
-
+const supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ'
+const supabase = supabase.createClient(supabaseUrl, supabaseKey)
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm')
     const emailInput = document.getElementById('email')

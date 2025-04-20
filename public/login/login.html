@@ -1,33 +1,40 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход в аккаунт</title>
     <link rel="stylesheet" href="/styles/auth.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Вход</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        // Глобальная инициализация Supabase
+        window.supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co';
+        window.supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ';
+        window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    </script>
 </head>
 
 <body>
-    <div class="login-container">
-        <div class="login-header">
-            <h1>МояКарта</h1>
-            <h2>Вход в аккаунт</h2>
-        </div>
+    <div class="container">
+        <button class="buttonmain">
+            <a href="/index.html">МояКарта</a>
+        </button>
+    </div>
+
+    <div class="container">
+        <h1 class="h1">Вход в аккаунт</h1>
 
         <form id="loginForm" class="login-form">
             <div class="input-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" required autocomplete="username">
+                <label for="username" class="username-label">Имя пользователя:</label>
+                <input type="text" id="username" name="username" required>
             </div>
-
             <div class="input-group">
-                <label for="password">Пароль</label>
-                <input type="password" id="password" required autocomplete="current-password">
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" required>
             </div>
-
-            <button type="submit" class="login-button">Войти</button>
+            <button type="submit" class="button">Войти</button>
         </form>
     </div>
 
