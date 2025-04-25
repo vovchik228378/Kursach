@@ -1,6 +1,3 @@
-// Используем глобальный объект supabase, инициализированный в HTML
-// const supabaseUrl = ... ; const supabaseKey = ...; const supabase = ...; - УДАЛЕНО
-
 // Глобальные переменные
 let map;
 let currentUser = null; // Храним объект пользователя
@@ -12,8 +9,12 @@ const userMarkersMap = new Map(); // Map для меток текущего по
 async function initAccountPage() {
     try {
         // 1. Проверка авторизации
-        const { data: { session }, error: sessionError } = await window.supabase.auth.getSession();
-
+        const {
+            data: {
+                session
+            },
+            error: sessionError
+        } = await window.supabase.auth.getSession();
         if (sessionError) throw new Error(`Ошибка получения сессии: ${sessionError.message}`);
         if (!session) {
             window.location.href = '/login/'; // Перенаправляем на страницу входа
@@ -26,12 +27,14 @@ async function initAccountPage() {
         profileUserId = urlParams.get('userId') || currentUser.id; // Либо из URL, либо свой ID
 
         // 3. Получаем данные пользователя (имя)
-        const { data: userData, error: userError } = await window.supabase
+        const {
+            data: userData,
+            error: userError
+        } = await window.supabase
             .from('users')
             .select('username')
             .eq('id', profileUserId) // Загружаем данные для просматриваемого профиля
             .single();
-
         if (userError && userError.code !== 'PGRST116') { // Игнорируем ошибку "не найдено", если пользователь только что зарег-ся
             console.error("Ошибка получения данных пользователя:", userError);
             // Можно показать сообщение об ошибке
@@ -40,7 +43,9 @@ async function initAccountPage() {
         // 4. Отображаем имя пользователя и настраиваем заголовок карты
         const usernameDisplay = document.getElementById('usernameDisplay');
         const mapTitle = document.getElementById('mapTitle');
-        const profileUsername = userData ? .username || `Пользователь ${profileUserId.substring(0, 6)}...`; // Используем username или часть ID
+        // ИСПРАВЛЕННАЯ СТРОКА 43: УБРАНЫ ПРОБЕЛ И ЛИШНЯЯ ТОЧКА ПОСЛЕ ?
+        const profileUsername = userData?.username || `Пользователь ${profileUserId.substring(0, 6)}...`; // Используем username или часть ID
+
 
         if (profileUserId === currentUser.id) {
             usernameDisplay.textContent = `Вы вошли как: ${profileUsername}`;
@@ -56,7 +61,9 @@ async function initAccountPage() {
 
         // 5. Настраиваем кнопку выхода
         document.getElementById('logoutButton').addEventListener('click', async() => {
-            const { error } = await window.supabase.auth.signOut();
+            const {
+                error
+            } = await window.supabase.auth.signOut();
             if (error) {
                 console.error('Ошибка выхода:', error);
                 alert('Не удалось выйти.');
@@ -64,7 +71,6 @@ async function initAccountPage() {
                 window.location.href = '/'; // Перенаправляем на главную после выхода
             }
         });
-
         // 6. Инициализация Яндекс.Карт
         await ymaps.ready();
         map = new ymaps.Map("map", {
@@ -72,14 +78,11 @@ async function initAccountPage() {
             zoom: 10,
             controls: ['zoomControl', 'fullscreenControl', 'geolocationControl'] // Добавлены контроли
         });
-
         // Убираем сообщение о загрузке
         const loadingIndicator = document.getElementById('map-loading');
         if (loadingIndicator) loadingIndicator.remove();
-
         // 7. Загрузка меток пользователя
         await loadUserMarkers(profileUserId);
-
         // 8. Добавляем обработчик клика для создания метки (только если можно)
         if (canAddMarkers) {
             map.events.add('click', (e) => {
@@ -90,7 +93,6 @@ async function initAccountPage() {
 
         // 9. Подписка на realtime обновления (опционально, если нужна для личной карты)
         setupUserRealtimeUpdates(profileUserId);
-
         console.log('Страница аккаунта успешно инициализирована.');
 
     } catch (error) {
@@ -98,7 +100,8 @@ async function initAccountPage() {
         // Показываем ошибку пользователю или редиректим
         const mapContainer = document.getElementById('map');
         if (mapContainer) {
-            mapContainer.innerHTML = `<div style="color: red; text-align: center; padding-top: 50px;">Ошибка загрузки профиля: ${error.message}. <a href="/">На главную</a></div>`;
+            mapContainer.innerHTML = `<div style="color: red; text-align: center; padding-top: 50px;">Ошибка загрузки профиля: ${error.message}.
+            <a href="/">На главную</a></div>`;
         }
         // window.location.href = '/login/'; // Или редирект на логин
     }
@@ -112,12 +115,16 @@ async function loadUserMarkers(userId) {
     }
     console.log(`Загрузка меток для пользователя ${userId}...`);
     try {
-        const { data: markers, error } = await window.supabase
+        const {
+            data: markers,
+            error
+        } = await window.supabase
             .from('markers')
             .select('*') // Здесь join не нужен, т.к. все метки одного пользователя
             .eq('user_id', userId)
-            .order('created_at', { ascending: false });
-
+            .order('created_at', {
+                ascending: false
+            });
         if (error) throw error;
 
         console.log(`Загружено ${markers.length} меток пользователя.`);
@@ -128,12 +135,14 @@ async function loadUserMarkers(userId) {
 
         // Добавляем новые метки
         markers.forEach(addMarkerToUserMap);
-
         // Центрируем карту по меткам пользователя
         if (markers.length > 0) {
             const bounds = map.geoObjects.getBounds();
             if (bounds) {
-                map.setBounds(bounds, { checkZoomRange: true, zoomMargin: 30 });
+                map.setBounds(bounds, {
+                    checkZoomRange: true,
+                    zoomMargin: 30
+                });
             }
         } else {
             console.log("У этого пользователя нет меток.");
@@ -167,14 +176,12 @@ function addMarkerToUserMap(marker) {
             balloonCloseButton: true
         }
     );
-
     // Если метку можно редактировать (своя метка)
     if (canAddMarkers) {
         // Добавляем кнопку удаления в балун
         placemark.properties.set('balloonContentFooter',
             `<button class="button-delete-marker" data-marker-id="${marker.id}">Удалить метку</button>`
         );
-
         // Обработчик перетаскивания
         placemark.events.add('dragend', async(e) => {
             const newCoords = e.get('target').geometry.getCoordinates();
@@ -196,7 +203,8 @@ function getMarkerColor(emoji) {
         case 'work':
             return '#0000FF';
         case 'favorite':
-            return '#FF00FF'; // Заменен redHeart на favorite для соответствия CSS/HTML
+            return '#FF00FF';
+            // Заменен redHeart на favorite для соответствия CSS/HTML
         default:
             return '#1E98FF';
     }
@@ -220,14 +228,17 @@ document.addEventListener('click', async(event) => {
         }
     }
 });
-
-
 // Функция обновления координат метки в БД
 async function updateMarkerCoords(markerId, coords) {
     try {
-        const { error } = await window.supabase
+        const {
+            error
+        } = await window.supabase
             .from('markers')
-            .update({ lat: coords[0], lng: coords[1] })
+            .update({
+                lat: coords[0],
+                lng: coords[1]
+            })
             .eq('id', markerId)
             .eq('user_id', currentUser.id); // Убедимся, что обновляем свою метку
 
@@ -246,11 +257,13 @@ async function updateMarkerCoords(markerId, coords) {
 async function deleteMarker(markerId) {
     try {
         // Закрываем балун, если он открыт для этой метки
-        if (map.balloon.isOpen() && map.balloon.getData() ? .properties ? .get('markerId') === markerId) {
+        if (map.balloon.isOpen() && map.balloon.getData()?.properties?.get('markerId') === markerId) {
             map.balloon.close();
         }
 
-        const { error } = await window.supabase
+        const {
+            error
+        } = await window.supabase
             .from('markers')
             .delete()
             .eq('id', markerId)
@@ -261,7 +274,6 @@ async function deleteMarker(markerId) {
         removeMarkerFromUserMap(markerId); // Удаляем с карты немедленно
         console.log(`Метка ${markerId} удалена из БД.`);
         alert('Метка успешно удалена.');
-
     } catch (error) {
         console.error('Ошибка удаления метки:', error);
         alert(`Не удалось удалить метку: ${error.message}`);
@@ -276,7 +288,10 @@ async function addNewMarker(coords, name, description, emoji = 'geolocation') {
         return false;
     }
     try {
-        const { data, error } = await window.supabase
+        const {
+            data,
+            error
+        } = await window.supabase
             .from('markers')
             .insert([{
                 user_id: currentUser.id,
@@ -290,7 +305,6 @@ async function addNewMarker(coords, name, description, emoji = 'geolocation') {
             .single(); // Ожидаем одну запись
 
         if (error) throw error;
-
         if (data) {
             // addMarkerToUserMap(data); // Метка добавится через realtime, если он включен
             console.log('Новая метка успешно добавлена в БД:', data);
@@ -324,7 +338,7 @@ function showMarkerForm(coords) {
                     <option value="favorite">❤️ Любимое место</option>
                     <option value="star">⭐ Важное</option>
                     <option value="shopping">🛒 Магазин</option>
-                     </select>
+                </select>
                 <div class="form-buttons">
                     <button type="button" id="cancelMarker" class="button button-cancel">Отмена</button>
                     <button type="button" id="saveMarker" class="button">Сохранить</button>
@@ -336,12 +350,10 @@ function showMarkerForm(coords) {
 
     // Фокус на поле названия
     document.getElementById('markerName').focus();
-
     // Обработчик отмены
     document.getElementById('cancelMarker').addEventListener('click', () => {
         document.querySelector('.marker-form-overlay').remove();
     });
-
     // Обработчик сохранения
     document.getElementById('saveMarker').addEventListener('click', async() => {
         const nameInput = document.getElementById('markerName');
@@ -398,6 +410,7 @@ function setupUserRealtimeUpdates(userIdToWatch) {
             } else if (payload.eventType === 'DELETE') {
                 removeMarkerFromUserMap(payload.old.id);
             }
+
         })
         .subscribe((status, err) => {
             if (status === 'SUBSCRIBED') {

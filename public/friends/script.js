@@ -18,7 +18,12 @@ document.addEventListener('DOMContentLoaded', async() => {
 
     try {
         // 1. Проверка авторизации и получение данных пользователя
-        const { data: { session }, error: authError } = await window.supabase.auth.getSession();
+        const {
+            data: {
+                session
+            },
+            error: authError
+        } = await window.supabase.auth.getSession();
 
         if (authError || !session) {
             // Если не авторизован, перенаправляем на логин
@@ -28,7 +33,10 @@ document.addEventListener('DOMContentLoaded', async() => {
         currentUserId = session.user.id;
 
         // 2. Получаем имя текущего пользователя для кнопки
-        const { data: currentUserData, error: userError } = await window.supabase
+        const {
+            data: currentUserData,
+            error: userError
+        } = await window.supabase
             .from('users')
             .select('username')
             .eq('id', currentUserId)
@@ -38,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             console.warn("Не удалось получить имя текущего пользователя:", userError);
             profileButton.textContent = 'Профиль';
         } else {
-            profileButton.textContent = currentUserData ? .username || 'Профиль';
+            profileButton.textContent = currentUserData ?.username || 'Профиль';
         }
         // profileButton.onclick остается как в HTML (переход на /account/)
 
@@ -54,7 +62,10 @@ document.addEventListener('DOMContentLoaded', async() => {
 
             try {
                 // Ищем в таблице users, исключая себя
-                const { data: users, error } = await window.supabase
+                const {
+                    data: users,
+                    error
+                } = await window.supabase
                     .from('users')
                     .select('id, username, email') // Выбираем нужные поля
                     .ilike('username', `%${queryText}%`) // Регистронезависимый поиск по части строки

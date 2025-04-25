@@ -6,7 +6,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Поиск пользователей - МояКарта</title>
     <link rel="stylesheet" href="/styles/main.css">
-    <link rel="stylesheet" href="/styles/friends.css">
+    <style>
+        /* Добавьте эти стили в ваш файл public/styles/friends.css */
+
+/* Улучшенная карточка пользователя */
+.user-card {
+    display: flex; /* Используем flexbox для выравнивания */
+    justify-content: space-between; /* Растягиваем элементы по сторонам */
+    align-items: center; /* Выравниваем по центру по вертикали */
+    padding: 15px 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    margin-bottom: 10px; /* Отступ между карточками */
+    flex-wrap: wrap; /* Перенос на новую строку на маленьких экранах */
+}
+
+.user-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #f0f4ff; /* Легкий фон при наведении */
+}
+
+.user-info {
+    flex-grow: 1; /* Позволяет блоку с информацией занимать доступное место */
+    margin-right: 15px; /* Отступ справа от информации до кнопки */
+    word-break: break-word; /* Перенос длинных слов */
+}
+
+.username {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-dark); /* Используем переменную цвета */
+}
+
+.view-profile {
+    /* Убедитесь, что базовые стили кнопки из main.css применяются */
+    flex-shrink: 0; /* Запрещаем кнопке сжиматься */
+    padding: 8px 15px; /* Уменьшаем padding кнопки для компактности в списке */
+    font-size: 0.95rem; /* Уменьшаем шрифт кнопки */
+}
+
+/* Стили для сообщений о поиске/нет результатов */
+.notice,
+.no-results,
+.error {
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: var(--shadow-small);
+    color: var(--text-color);
+}
+
+.error {
+    color: #d32f2f; /* Красный цвет для ошибок */
+    background-color: #ffebee;
+}
+
+.no-results .button-retry {
+    margin-top: 15px;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+}
+
+
+/* Адаптивность для карточек пользователей на маленьких экранах */
+@media (max-width: 600px) {
+    .user-card {
+        flex-direction: column; /* Перестраиваем в колонку */
+        align-items: stretch; /* Растягиваем элементы */
+    }
+    .user-info {
+        margin-right: 0; /* Убираем правый отступ */
+        margin-bottom: 10px; /* Добавляем нижний отступ */
+        text-align: center; /* Центрируем текст */
+    }
+    .view-profile {
+        width: 100%; /* Кнопка на всю ширину */
+        text-align: center;
+    }
+}
+    </style>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
         // Глобальная инициализация Supabase
