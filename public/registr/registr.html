@@ -1,52 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/auth.css">
-    <title>Регистрация</title>
+    <title>Регистрация - МояКарта</title>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
         // Глобальная инициализация Supabase
-        window.supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co';
-        window.supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ';
-        window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        document.addEventListener('DOMContentLoaded', () => {
+            const supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ'; // Используйте ваш Anon Key
+            window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        });
     </script>
+    <script src="script.js" defer></script>
 </head>
 
 <body>
     <div class="container">
-        <button class="buttonmain">
-            <a href="/index.html">МояКарта</a>
-        </button>
+        <button class="buttonmain" onclick="window.location.href='/'">
+             МояКарта
+         </button>
     </div>
 
-    <div class="container">
+    <div class="container auth-container">
         <h1 class="h1">Регистрация</h1>
 
         <form id="registrationForm" class="login-form">
+            <div id="errorMessage" class="error-message" style="display: none; color: red; margin-bottom: 15px;"></div>
+
             <div class="input-group">
                 <label for="username">Имя пользователя:</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" required minlength="3" maxlength="30" pattern="^[a-zA-Z0-9_]+$" title="Только буквы (a-z, A-Z), цифры (0-9) и знак подчеркивания (_)">
+                <small style="font-size: 0.8em; color: #666;">От 3 до 30 символов. Только латинские буквы, цифры и '_'</small>
             </div>
             <div class="input-group">
                 <label for="email">Электронная почта:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" required autocomplete="email">
             </div>
             <div class="input-group">
                 <label for="password">Пароль:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" required minlength="6" title="Минимум 6 символов" autocomplete="new-password">
+                <small style="font-size: 0.8em; color: #666;">Минимум 6 символов</small>
             </div>
             <div class="input-group">
                 <label for="confirm-password">Подтвердите пароль:</label>
-                <input type="password" id="confirm-password" name="confirm-password" required>
+                <input type="password" id="confirm-password" name="confirm-password" required minlength="6" autocomplete="new-password">
             </div>
-            <button type="submit" class="button">Зарегистрироваться</button>
+            <button type="submit" class="button" id="registerButton">Зарегистрироваться</button>
         </form>
+        <div class="form-footer">
+            Уже есть аккаунт? <a href="/login/">Войти</a>
+        </div>
     </div>
 
-    <script src="script.js"></script>
 </body>
 
 </html>

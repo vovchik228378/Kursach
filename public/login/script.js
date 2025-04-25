@@ -1,76 +1,72 @@
-// Инициализация Supabase
-const supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ'
-const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+// Используем глобальный объект window.supabase
+
 document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('loginForm')
-    const emailInput = document.getElementById('email')
-    const passwordInput = document.getElementById('password')
-    const submitBtn = loginForm.querySelector('button[type="submit"]')
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email'); // Используем email ID
+    const passwordInput = document.getElementById('password');
+    const submitBtn = document.getElementById('loginButton'); // Используем ID кнопки
+    const errorMessageDiv = document.getElementById('errorMessage');
 
-    // Проверка активной сессии
-    supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session) {
-            window.location.href = '/account/index.html'
-        }
-    })
+    // Проверяем, инициализирован ли Supabase
+    if (!window.supabase) {
+        console.error("Supabase не инициализирован!");
+        errorMessageDiv.textContent = "Ошибка инициализации. Попробуйте обновить страницу.";
+        errorMessageDiv.style.display = 'block';
+        submitBtn.disabled = true;
+        return;
+    }
 
-    // Обработка формы входа
     loginForm.addEventListener('submit', async(e) => {
-        e.preventDefault()
+        e.preventDefault(); // Предотвращаем стандартную отправку формы
+        errorMessageDiv.style.display = 'none'; // Скрываем предыдущие ошибки
 
-        const email = emailInput.value.trim()
-        const password = passwordInput.value
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
 
-        // Валидация
+        // Простая валидация на клиенте
         if (!email || !password) {
-            showError('Заполните все поля')
-            return
+            errorMessageDiv.textContent = 'Пожалуйста, заполните все поля.';
+            errorMessageDiv.style.display = 'block';
+            return;
         }
 
-        // Блокировка кнопки во время запроса
-        submitBtn.disabled = true
-        submitBtn.textContent = 'Вход...'
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Вход...';
 
         try {
-            const { error } = await supabase.auth.signInWithPassword({
-                email,
-                password
-            })
+            const { data, error } = await window.supabase.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
 
-            if (error) throw error
+            if (error) {
+                // Обрабатываем специфичные ошибки Supabase
+                console.error('Ошибка входа:', error);
+                if (error.message.includes('Invalid login credentials')) {
+                    errorMessageDiv.textContent = 'Неверный email или пароль.';
+                } else if (error.message.includes('Email not confirmed')) {
+                    errorMessageDiv.textContent = 'Пожалуйста, подтвердите ваш email. Проверьте почту.';
+                } else {
+                    errorMessageDiv.textContent = `Ошибка входа: ${error.message}`;
+                }
+                errorMessageDiv.style.display = 'block';
+                passwordInput.value = ''; // Очищаем поле пароля
+                emailInput.focus(); // Фокус на email
+            } else {
+                console.log('Успешный вход:', data);
+                // Перенаправляем в личный кабинет после успешного входа
+                window.location.href = '/account/'; // Редирект на страницу аккаунта
+            }
 
-            // Успешный вход
-            window.location.href = '/account/index.html'
         } catch (error) {
-            showError(getErrorMessage(error))
+            // Ловим другие возможные ошибки (например, сетевые)
+            console.error('Непредвиденная ошибка входа:', error);
+            errorMessageDiv.textContent = 'Произошла непредвиденная ошибка. Попробуйте еще раз.';
+            errorMessageDiv.style.display = 'block';
         } finally {
-            submitBtn.disabled = false
-            submitBtn.textContent = 'Войти'
+            // Всегда включаем кнопку обратно
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Войти';
         }
-    })
-
-    // Показать ошибку
-    function showError(message) {
-        let errorElement = document.getElementById('error-message')
-        if (!errorElement) {
-            errorElement = document.createElement('div')
-            errorElement.id = 'error-message'
-            errorElement.className = 'error-message'
-            loginForm.prepend(errorElement)
-        }
-        errorElement.textContent = message
-    }
-
-    // Преобразование ошибок в понятный текст
-    function getErrorMessage(error) {
-        switch (error.message) {
-            case 'Invalid login credentials':
-                return 'Неверный email или пароль'
-            case 'Email not confirmed':
-                return 'Подтвердите email перед входом'
-            default:
-                return 'Ошибка входа: ' + error.message
-        }
-    }
-})
+    });
+});

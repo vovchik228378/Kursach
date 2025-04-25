@@ -1,44 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/auth.css">
-    <title>Вход</title>
+    <title>Вход - МояКарта</title>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
         // Глобальная инициализация Supabase
-        window.supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co';
-        window.supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ';
-        window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        document.addEventListener('DOMContentLoaded', () => {
+            const supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ'; // Используйте ваш Anon Key
+            window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        });
     </script>
+    <script src="script.js" defer></script>
 </head>
 
 <body>
     <div class="container">
-        <button class="buttonmain">
-            <a href="/index.html">МояКарта</a>
+        <button class="buttonmain" onclick="window.location.href='/'">
+             МояКарта
         </button>
     </div>
 
-    <div class="container">
+    <div class="container auth-container">
         <h1 class="h1">Вход в аккаунт</h1>
 
         <form id="loginForm" class="login-form">
+            <div id="errorMessage" class="error-message" style="display: none; color: red; margin-bottom: 15px;"></div>
             <div class="input-group">
-                <label for="username" class="username-label">Имя пользователя:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="email" class="username-label">Электронная почта:</label>
+                <input type="email" id="email" name="email" required autocomplete="email">
             </div>
             <div class="input-group">
                 <label for="password">Пароль:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
             </div>
-            <button type="submit" class="button">Войти</button>
+            <button type="submit" class="button" id="loginButton">Войти</button>
         </form>
+        <div class="form-footer">
+            Нет аккаунта? <a href="/registr/">Зарегистрироваться</a>
+        </div>
     </div>
 
-    <script src="script.js"></script>
 </body>
 
 </html>

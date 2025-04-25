@@ -4,48 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Поиск пользователей</title>
+    <title>Поиск пользователей - МояКарта</title>
     <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/friends.css">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
         // Глобальная инициализация Supabase
-        window.supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co';
-        window.supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ';
+        const supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ'; // Используйте ваш Anon Key
         window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
     </script>
+    <script src="script.js" defer></script>
 </head>
 
 <body>
     <div class="top-bar">
-        <button class="buttonmain"><a href="main/index.html">МояКарта</a></button>
+        <button class="buttonmain" onclick="window.location.href='/'">МояКарта</button>
         <div class="user-info">
-            <button class="button" id="profileButton">Личный кабинет</button>
+            <button class="button" id="profileButton" onclick="window.location.href='/account/'">Личный кабинет</button>
         </div>
     </div>
 
-    <div class="search-section">
+    <div class="container search-container">
         <h1>Поиск пользователей</h1>
 
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Введите никнейм пользователя">
+            <input type="text" id="searchInput" placeholder="Введите имя пользователя для поиска" aria-label="Поиск пользователя">
             <button id="searchBtn" class="button">Найти</button>
         </div>
 
-        <div id="results" class="users-list"></div>
+        <div id="results" class="users-list">
+            <div class="notice">Начните вводить имя пользователя для поиска.</div>
+        </div>
     </div>
 
-    <script src="script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const username = localStorage.getItem('username');
-            if (username) {
-                document.getElementById('profileButton').textContent = username;
-                document.getElementById('profileButton').onclick = () => {
-                    window.location.href = 'account/index.html';
-                };
-            }
-        });
-    </script>
 </body>
 
 </html>

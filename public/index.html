@@ -5,33 +5,48 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/styles/main.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>МояКарта - Главная</title>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script>
-        // Глобальная инициализация Supabase
-        window.supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co';
-        window.supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ';
-        window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
-    </script>
+    <title>МояКарта - Добро пожаловать!</title>
+    <style>
+        /* Простые стили для центрирования */
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        
+        .main-container {
+            max-width: 500px;
+        }
+        
+        .logo-button {
+            margin-bottom: 30px;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .auth-button {
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>
     <div class="main-container">
         <div class="logo-container">
-            <button class="logo-button">
-                <a href="index.html">МояКарта</a>
-            </button>
+            <div class="logo-button" style="cursor: default; background-color: var(--primary-dark);">МояКарта</div>
         </div>
         <div class="auth-buttons">
-            <button class="auth-button">
-                <a href="/login/login.html">Вход</a>
-            </button>
-            <button class="auth-button register">
-                <a href="/registr/registr.html">Регистрация</a>
-            </button>
-        </div>
+            <a href="/login/" class="auth-button">Вход</a>
+            <a href="/registr/" class="auth-button register">Регистрация</a>
+            <a href="/main/" class="auth-button" style="background-color: var(--secondary-color); margin-top: 20px;">Смотреть общую карту</a> </div>
     </div>
-    <script src="script.js"></script>
 </body>
 
 </html>

@@ -7,44 +7,36 @@
     <title>МояКарта - Личный кабинет</title>
     <link rel="stylesheet" href="/styles/main.css">
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7177144e-52fd-4848-8122-eed8ecb9c686&lang=ru_RU" type="text/javascript"></script>
-    <script src="script.js"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
         // Глобальная инициализация Supabase
-        window.supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co';
-        window.supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ';
+        const supabaseUrl = 'https://mxdddbkfyugyyzabfqor.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZGRkYmtmeXVneXl6YWJmcW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwOTY3NzMsImV4cCI6MjA2MDY3Mjc3M30.zNoJad5-R0mTP95yz-2_0j-Lj6-eNy4S89ciQ7BZWmQ'; // Используйте ваш Anon Key
         window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
     </script>
+    <script src="script.js" defer></script>
 </head>
 
 <body>
     <div class="top-bar">
-        <button class="buttonmain"><a href="/main/index.html">МояКарта</a></button>
+        <button class="buttonmain" onclick="window.location.href='/'">МояКарта</button>
         <div class="user-info">
-            <button class="button" id="profileButton">Профиль</button>
+            <span id="usernameDisplay" style="color: white; margin-right: 15px;">Загрузка...</span>
             <button class="button" id="logoutButton">Выход</button>
         </div>
     </div>
     <div class="container">
         <section class="map-section">
-            <h2>Моя карта (личные метки)</h2>
-            <div id="map" style="width: 100%; height: 600px;"></div>
+            <h2 id="mapTitle">Моя карта</h2>
+            <div id="map" style="width: 100%; height: 600px;">
+                <div id="map-loading" style="text-align: center; padding-top: 50px;">Загрузка карты...</div>
+            </div>
+            <div id="addMarkerInfo" style="margin-top: 15px; text-align: center; display: none;">
+                Кликните на карту, чтобы добавить новую метку.
+            </div>
         </section>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const username = localStorage.getItem('username');
-            if (username) {
-                document.getElementById('profileButton').textContent = username;
-            }
 
-            document.getElementById('logoutButton').addEventListener('click', function() {
-                localStorage.removeItem('token');
-                localStorage.removeItem('username');
-                window.location.href = 'index.html';
-            });
-        });
-    </script>
 </body>
 
 </html>
