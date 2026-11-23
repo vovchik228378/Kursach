@@ -1,0 +1,62 @@
+/* =============================================================================
+   Дизайн-токены «МояКарта 2.0»
+   Тёплый коралловый бренд, холодный графитовый текст, светлые поверхности.
+   ============================================================================= */
+
+:root {
+  color-scheme: light;
+
+  /* Поверхности */
+  --c-bg: #f5f6f8;
+  --c-surface: #ffffff;
+  --c-surface-2: #f2f4f7;
+  --c-surface-3: #eaecf0;
+
+  /* Текст */
+  --c-ink: #101828;
+  --c-ink-2: #475467;
+  --c-muted: #98a2b3;
+  --c-line: #e4e7ec;
+  --c-line-strong: #d0d5dd;
+
+  /* Бренд */
+  --c-brand: #ff4d2e;
+  --c-brand-hover: #e8411f;
+  --c-brand-soft: #fff0ec;
+  --c-brand-ink: #ffffff;
+
+  /* Акцент */
+  --c-accent: #1b4dff;
+  --c-accent-soft: #eef2ff;
+
+  /* Статусы */
+  --c-ok: #12b76a;
+  --c-ok-soft: #e7f8f0;
+  --c-warn: #f79009;
+  --c-warn-soft: #fef4e6;
+  --c-danger: #d92d20;
+  --c-danger-soft: #fef0ef;
+
+  /* Радиусы */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-pill: 999px;
+
+  /* Тени */
+  --sh-xs: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --sh-sm: 0 2px 8px rgba(16, 24, 40, 0.08);
+  --sh-md: 0 8px 24px rgba(16, 24, 40, 0.1);
+  --sh-lg: 0 20px 48px rgba(16, 24, 40, 0.16);
+
+  /* Типографика */
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+
+  /* Метрики */
+  --header-h: 64px;
+  --sidebar-w: 388px;
+
+  --transition: 160ms ease;
+}

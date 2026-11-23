@@ -1,12 +1,26 @@
-my-project/
-├── public/          # Весь фронтенд
+mycard/                       # корень репозитория (не npm-пакет, только скрипты)
+├── firebase.json             # Hosting: public = app/dist, SPA-rewrite, заголовки
+├── .firebaserc                # проект mycard-ae62b, target production
+├── package.json               # скрипты dev/build/deploy, делегируют в app/
+├── README.md
+├── docs/                      # архитектура, база, сценарии проверки
+├── supabase/
+│   ├── migrations/            # 0001…0008: схема, RLS, Storage, Realtime, категории
+│   ├── tests/                 # локальный прогон миграций и RLS (PGlite)
+│   └── README.md              # как создать проект и применить миграции
+├── app/                       # дипломный фронтенд
+│   ├── package.json
+│   ├── vite.config.ts         # publicDir = static, outDir = dist
 │   ├── index.html
-│   ├── account/
-│   ├── friends/
-│   ├── login.html
-│   ├── registr.html
-│   ├── styles.css
-│   └── script.js
-└── functions/       # Бэкенд
-    ├── index.js
-    └── package.json
+│   ├── .env.example
+│   ├── static/                # favicon
+│   └── src/
+│       ├── main.tsx
+│       ├── App.tsx            # маршруты
+│       ├── components/        # AppShell, MapCanvas, MarkerCard, MarkerPanel, форма
+│       ├── features/auth/     # AuthProvider
+│       ├── lib/               # supabase.ts, ymaps.ts
+│       ├── pages/             # MapPage, LoginPage, RegisterPage, NotFoundPage
+│       ├── styles/            # tokens.css, global.css
+│       └── types/             # db.ts
+└── public/                    # архив курсовой версии, в сборку не входит

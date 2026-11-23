@@ -158,7 +158,7 @@ async function loadUserMarkers(userId) {
 
 // Функция добавления метки на ЛИЧНУЮ карту
 function addMarkerToUserMap(marker) {
-    if (!map || !marker || !marker.lat || !marker.lng) {
+    if (!map || !marker || typeof marker.lat !== 'number' || typeof marker.lng !== 'number') {
         console.warn("Невозможно добавить метку на карту пользователя: отсутствуют данные или карта не готова.", marker);
         return;
     }

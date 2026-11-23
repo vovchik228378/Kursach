@@ -1,5 +1,23 @@
 {
-  "dependencies": {
-    "@supabase/supabase-js": "^2.49.4"
+  "name": "mycard",
+  "version": "2.0.0",
+  "private": true,
+  "description": "МояКарта — дипломная версия: карта мест на Supabase + React",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.11"
+  },
+  "scripts": {
+    "dev": "npm --prefix app run dev",
+    "install:app": "npm --prefix app install",
+    "build": "npm --prefix app run build",
+    "typecheck": "npm --prefix app run typecheck",
+    "test:app": "npm --prefix app run test",
+    "test:db": "node supabase/tests/rls.test.mjs",
+    "start": "npm --prefix app run build && npx --yes firebase-tools@15 emulators:start --only hosting",
+    "deploy": "npm --prefix app run build && npx --yes firebase-tools@15 deploy --only hosting:production",
+    "deploy:preview": "npm --prefix app run build && npx --yes firebase-tools@15 hosting:channel:deploy preview --expires 7d"
   }
 }

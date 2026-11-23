@@ -1,61 +1,57 @@
 {
     "hosting": {
-        "public": "public",
+        "target": "production",
+        "public": "app/dist",
         "ignore": [
             "firebase.json",
             "**/.*",
-            "**/node_modules/**"
+            "**/node_modules/**",
+            "**/*.map"
         ],
         "rewrites": [{
-                "source": "/account{,/**}",
-                "destination": "/account/index.html"
-            },
-            {
-                "source": "/friends{,/**}",
-                "destination": "/friends/index.html"
-            },
-            {
-                "source": "/login{,/**}",
-                "destination": "/login/login.html"
-            },
-            {
-                "source": "/registr{,/**}",
-                "destination": "/registr/registr.html"
-            },
-            {
-                "source": "**",
-                "destination": "/index.html"
-            }
-        ],
+            "source": "**",
+            "destination": "/index.html"
+        }],
         "headers": [{
-                "source": "/styles/main.css",
+                "source": "**",
                 "headers": [{
-                        "key": "Cache-Control",
-                        "value": "max-age=31536000"
+                        "key": "X-Content-Type-Options",
+                        "value": "nosniff"
                     },
                     {
-                        "key": "Vary",
-                        "value": "Accept-Encoding"
+                        "key": "Referrer-Policy",
+                        "value": "strict-origin-when-cross-origin"
+                    },
+                    {
+                        "key": "X-Frame-Options",
+                        "value": "SAMEORIGIN"
+                    },
+                    {
+                        "key": "Permissions-Policy",
+                        "value": "geolocation=(self), camera=(), microphone=()"
+                    },
+                    {
+                        "key": "Strict-Transport-Security",
+                        "value": "max-age=31536000; includeSubDomains"
+                    },
+                    {
+                        "key": "Cache-Control",
+                        "value": "no-cache"
                     }
                 ]
             },
             {
-                "source": "/styles/auth.css",
-                "headers": [{
-                        "key": "Cache-Control",
-                        "value": "max-age=31536000"
-                    },
-                    {
-                        "key": "Vary",
-                        "value": "Accept-Encoding"
-                    }
-                ]
-            },
-            {
-                "source": "**/*.@(js|png|jpg|jpeg|gif|ico|svg)",
+                "source": "/assets/**",
                 "headers": [{
                     "key": "Cache-Control",
-                    "value": "max-age=31536000"
+                    "value": "public, max-age=31536000, immutable"
+                }]
+            },
+            {
+                "source": "**/*.@(png|jpg|jpeg|gif|ico|svg|webp|woff2)",
+                "headers": [{
+                    "key": "Cache-Control",
+                    "value": "public, max-age=604800"
                 }]
             }
         ]

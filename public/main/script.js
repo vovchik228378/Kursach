@@ -2,6 +2,7 @@
 // const supabase = supabase.createClient(...) - УДАЛЕНО
 
 let map;
+let mapInitPromise = null; // Промис инициализации карты (нужен, чтобы не терять метки при гонке)
 const markersMap = new Map(); // Используем Map для удобного управления метками по ID
 
 // Инициализация карты и загрузка меток
@@ -39,8 +40,12 @@ async function initMap() {
 // Загрузка ВСЕХ меток из базы данных
 async function loadAllMarkers() {
     if (!map) {
-        console.warn("Карта еще не готова для загрузки меток.");
-        return;
+        // Страница может запросить метки раньше, чем карта успела создаться.
+        if (mapInitPromise) await mapInitPromise;
+        if (!map) {
+            console.warn("Карта не инициализирована — метки не загружены.");
+            return;
+        }
     }
     console.log("Загрузка всех меток...");
     try {
@@ -148,7 +153,7 @@ function setupRealtimeUpdates() {
 
 // Добавление метки на карту
 function addMarkerToMap(marker) {
-    if (!map || !marker || !marker.lat || !marker.lng) {
+    if (!map || !marker || typeof marker.lat !== 'number' || typeof marker.lng !== 'number') {
         console.warn("Невозможно добавить метку: отсутствуют данные или карта не готова.", marker);
         return;
     }
@@ -208,7 +213,7 @@ function removeMarkerFromMap(markerId) {
 // Инициализация при загрузке DOM (теперь через defer в HTML)
 // document.addEventListener('DOMContentLoaded', initMap); // УДАЛЕНО, т.к. defer и onload в body
 // Запускаем инициализацию карты сразу
-initMap();
+mapInitPromise = initMap();
 
 // Глобальная функция для вызова из HTML (если понадобится)
 window.loadAllMarkers = loadAllMarkers;

@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                     error
                 } = await window.supabase
                     .from('users')
-                    .select('id, username, email') // Выбираем нужные поля
+                    .select('id, username') // Выбираем нужные поля (email другим пользователям не нужен)
                     .ilike('username', `%${queryText}%`) // Регистронезависимый поиск по части строки
                     .neq('id', currentUserId) // Исключаем текущего пользователя
                     .limit(20); // Ограничиваем количество результатов
